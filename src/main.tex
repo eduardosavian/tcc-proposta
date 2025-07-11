@@ -1,0 +1,288 @@
+%%%%%%%%%%%%%%%%% ATENÇÃO %%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   O COMPILADOR DO PROJETO PRECISA SER O XeLaTeX
+%  
+%   Clique em menu (canto superior esquerdo)
+%   Na aba configurações, em Compilador, selecione
+%   a opção XeLaTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,12pt,brazil]{article} % This defines the style of your paper
+
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage{lastpage}			% Usado pela Ficha catalográfica
+\usepackage{indentfirst}		% Indenta o primeiro parágrafo de cada seção.
+\setlength\parindent{0.49in}
+
+% Citação padrão ABNT
+\usepackage[alf,abnt-etal-list=0,abnt-etal-cite=3,abnt-repeated-author-omit=no,abnt-doi=expand,abnt-emphasize=bf]{abntex2cite}
+
+% Arquivo .sty criado
+\usepackage{proposta-template}
+\usepackage[portuguese]{babel}
+
+\bibliographystyle{abnt-alf}
+
+\begin{document}
+
+% Página Inicial -- Proposta de Trabalho
+\input{proposta_trabalho.tex} \clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%     2a. pag       %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+
+\uTitulo{ANÁLISE DO IMPACTO DE PROCESSAMENTO PARALELO, SEGMENTAÇÃO E AUTOTUNING NA CLASSIFICAÇÃO DE IMAGENS HIPERESPECTRAIS COM CNNs 1D}
+\\
+
+
+\vspace{3\bigskipamount}
+
+\uAutor{Eduardo Savian} \\ 
+\bigskip
+07 / 2025
+
+\end{center}
+
+\vspace{4\bigskipamount}
+
+\noindent
+Orientador: Felipe Viel, M.Sc. \\ 
+Área de Trabalho: Visão Computacional\\
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%     INTRODUCAO    %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introdução}
+
+A análise de imagens de sensoriamento remoto (do inglês \textit{Remote Sensing} -- RS) da Terra, particularmente a classificação de imagens hiperespectrais (do inglês \textit{hyperspectral images} -- HSI), tem se estabelecido como uma técnica para a extração de informações detalhadas sobre a superfície terrestre \cite{lary2016machine}. As HSIs são caracterizadas por sua assinatura espectral, capturando centenas de bandas do espectro eletromagnético (EM), desde o visível até o infravermelho, o que permite a identificação precisa da composição de materiais por pixel \cite{xia2015random, bera2020analysis}.
+
+Além das aplicações tradicionais em sensoriamento remoto, as técnicas de classificação hiperespectral têm encontrado aplicação em diversas áreas interdisciplinares. No contexto de sensoriamento remoto, as HSIs são amplamente utilizadas para monitoramento de cultivos agrícolas através da detecção de estresse e avaliação nutricional das plantas, identificação precoce de doenças por meio da análise de mudanças espectrais na reflectância vegetal, e avaliação de propriedades do solo, incluindo conteúdo de umidade e níveis de matéria orgânica \cite{thenkabail2000hyperspectral, deng2024rustqnet}. Na área de monitoramento ambiental, essas técnicas desempenham papel vital no rastreamento de níveis de poluição através da análise de assinaturas espectrais de poluentes no ar e água, facilitando o mapeamento de ecossistemas e avaliação da qualidade da água através da detecção de florações algais nocivas \cite{zheng2019sparse}.
+
+Em aplicações biomédicas e análise de DNA, a classificação hiperespectral tem encontrado uso em diagnósticos médicos através da identificação de características anômalas de tecidos, monitoramento da saúde tecidual, e análise não-invasiva para avaliação da eficácia de tratamentos através de análise espectral \cite{hong2024spectral, jensen2016introductory}. Na análise de material genético, técnicas espectrais são aplicadas para classificação de proteínas ligantes e não-ligantes de DNA, caracterização de células individuais através de microscopia de fluorescência, e análise de organelas subcelulares específicas.
+
+No entanto, a classificação de HSIs apresenta desafios devido à alta dimensionalidade dos dados, que pode levar ao fenômeno de Hughes, e à disponibilidade limitada de amostras de treinamento confiáveis \cite{plaza2009recent}. Métodos tradicionais de aprendizado de máquina (do inglês \textit{Machine Learning} -- ML) enfrentam obstáculos em cenários do mundo real, o que impulsionou o desenvolvimento de técnicas de aprendizado profundo (do inglês \textit{Deep Learning} -- DL), que emergiram como soluções para a interpretação de dados de HSI, superando as limitações dos métodos convencionais \cite{lu2020deep, xia2015random}. Entre os modelos de DL, as Redes Neurais Convolucionais (do inglês \textit{Convolutional Neural Networks} -- CNNs) se destacam na classificação de HSI, podendo processar características espectrais, espaciais ou ambas \cite{bera2020analysis, li2015local}.
+
+Este estudo propõe uma abordagem integrada que combina processamento paralelo, técnicas de segmentação avançadas e otimização automática para classificação de imagens hiperespectrais utilizando Redes Neurais Convolucionais 1D. A solução desenvolvida busca superar as limitações dos métodos convencionais através de três frentes principais:
+
+\textbf{Processamento Paralelo:} Implementação de técnicas de paralelização nos fluxos de pré-processamento e classificação, permitindo execução simultânea das etapas de segmentação e processamento espectral. Esta abordagem visa reduzir significativamente o tempo total de processamento, explorando a capacidade computacional disponível de forma mais eficiente.
+
+\textbf{Segmentação:} Integração e comparação de algoritmos de segmentação avançados como técnicas de pré-processamento espacial, combinados com CNN 1D para processamento espectral. Esta avaliação comparativa permitirá identificar o algoritmo de segmentação mais eficaz para fusão de dados espaciais e espectrais, implementada de forma otimizada, adicionando apenas duas camadas à rede neural, mantendo a eficiência computacional \cite{viel2023hyperspectral}.
+
+\textbf{Autotuning:} Implementação de técnicas de otimização automática de parâmetros tanto para o algoritmo de segmentação quanto para a arquitetura CNN 1D. Esta abordagem elimina a necessidade de ajuste manual de parâmetros, permitindo adaptação automática às características específicas de diferentes conjuntos de dados hiperespectrais.
+
+A arquitetura proposta visa alcançar desempenho comparável às redes 3D mais robustas, mantendo a eficiência computacional das CNNs 1D e introduzindo capacidades de processamento paralelo e otimização automática não exploradas em trabalhos anteriores.
+
+Este trabalho está inserido no contexto da análise e desenvolvimento de uma arquitetura otimizada para classificação de HSIs, investigando especificamente a integração de processamento paralelo, segmentação e autotuning. Para delimitar o escopo, foram definidas as seguintes premissas:
+
+\begin{itemize}
+\item \textbf{Algoritmos base:} Não serão propostos novos algoritmos de segmentação ou modelos de classificação, mas sim usado versões otimizadas de algoritmos disponíveis na literatura. Será realizada comparação entre diferentes algoritmos de segmentação e o modelo CNN 1D como base de classificação;
+
+\item \textbf{Métricas de avaliação:} As métricas incluem Acurácia Média (AA), Acurácia Geral (OA), coeficiente Kappa de Cohen (Kappa), tempo de processamento, uso de memória e eficiência de paralelização (speedup);
+
+\item \textbf{Técnicas de otimização:} Implementação de processamento paralelo em nível de algoritmo, otimização automática de hiperparâmetros usando técnicas como Grid Search, Random Search ou algoritmos evolutivos;
+
+\item \textbf{Datasets:} Utilização de datasets públicos de referência na literatura;
+
+\item \textbf{Comparação:} Benchmarking com arquiteturas de referência \cite{roy2020hybridsn}, Deep Matrix Capsules \cite{ravikumar2022hyperspectral}) e análise comparativa entre diferentes algoritmos de segmentação para avaliar o impacto individual de cada componente proposto.
+\end{itemize}
+
+A escolha da integração entre processamento paralelo, segmentação e CNN 1D com autotuning fundamenta-se em evidências científicas e necessidades práticas identificadas na literatura. Esta abordagem multifacetada oferece vantagens significativas em relação às soluções tradicionais.
+
+Conforme demonstrado por \cite{viel2023hyperspectral}, as CNNs 1D apresentam desempenho comparável às arquiteturas 3D (superiores a 95\% em alguns datasets) com requisitos computacionais significativamente menores. Enquanto redes 3D como HybridSN \cite{roy2020hybridsn} exigem geração de hipercubos com alto custo de memória e tempo, as CNNs 1D processam apenas vetores espectrais, resultando em modelos mais leves e inferência mais rápida.
+
+Embora eficientes espectralmente, as CNNs 1D não exploram contexto geométrico e relações de vizinhança \cite{paoletti2019deep}. A integração com algoritmos de segmentação supre esta limitação, fornecendo informações espaciais através de diferentes abordagens de segmentação eficiente. A comparação entre estes algoritmos permitirá identificar qual oferece melhor relação entre velocidade, precisão e baixa sobrecarga ao pipeline de processamento.
+
+A natureza independente das operações de segmentação espacial e processamento espectral inicial permite execução paralela, reduzindo tempo total de processamento. Esta abordagem é particularmente relevante considerando a disponibilidade crescente de sistemas multi-core e a necessidade de processamento em tempo real para aplicações de sensoriamento remoto.
+
+O ajuste manual de parâmetros em sistemas de classificação HSI é complexo e específico para cada dataset. Técnicas de autotuning permitem adaptação automática às características dos dados, melhorando robustez e generalizabilidade da solução, aspectos críticos para aplicações práticas.
+
+A solução desenvolvida atende demandas reais de processamento HSI, como necessidade de sistemas eficientes para monitoramento ambiental, agricultura de precisão e análise geológica, onde recursos computacionais limitados e requisitos de tempo real são constantes.
+ 
+
+\subsection{Objetivos}
+
+Esta seção formaliza os objetivos do trabalho, conforme descrito a seguir.
+
+\bigskip
+\subsubsection{Objetivo Geral}
+
+Analisar o impacto da integração de processamento paralelo, algoritmos de segmentação e técnicas de autotuning em pipeline de classificação de imagens hiperespectrais utilizando Redes Neurais Convolucionais 1D.
+
+%Conceito claro de modelo e arquitetura
+
+\bigskip
+\subsubsection{Objetivos Específicos}
+
+\begin{enumerate}
+    \item Investigar Técnicas de Processamento Paralelo para Pré-processamento e Classificação de HSI;
+
+    \item Integrar o paralelismo nos fluxos de trabalho de processamento HSI;
+    
+    \item Avaliar algoritmos e parâmetros eficientes para segmentação HSI;
+    
+    \item Análise de classificação abrangente de HSIs usando métricas pertinentes.
+    
+\end{enumerate}
+
+\bigskip
+
+\subsection{Plano de trabalho}
+
+Este é um trabalho que tem como objetivo o desenvolvimento de uma aplicação voltada para uma solução que requer o uso de visão computacional, aliada ao aprendizado profundo, com o propósito de ser implementada em um ambiente real por meio de um robô, como citado na introdução da proposta.
+
+Os requisitos levantados serão averiguados através de análises quantitativas e qualitativas dos resultados obtidos através dos testes realizados com os modelo de aprendizado profundo operacionalizado implementado, por meio de métricas de acurácia, tempo de execução e consumo de memória.
+
+%\subsubsection{Plano de trabalho}
+
+\begin{enumerate}
+    \item \textbf{Levantamento teórico}: permitirá identificar e analisar as principais obras e autores que tratam problemas semelhantes ao proposto.
+    \begin{enumerate}
+        \item[a.] \underline{Revisão bibliográfica de HSI:} levantamento de trabalhos sobre classificação de imagens hiperespectrais, CNN 1D e técnicas de fusão espacial-espectral;
+        \item[b.] \underline{Análise de técnicas de segmentação:} estudo comparativo dos algoritmos de segmentação aplicados a HSI;
+        \item[c.] \underline{Processamento paralelo em HSI:} revisão de técnicas de paralelização para processamento de imagens hiperespectrais;
+        \item[d.] \underline{Autotuning em ML:} análise de métodos de otimização automática de hiperparâmetros;
+    \end{enumerate}
+    
+    \item \textbf{Identificação dos datasets de referência}: auxiliará na escolha dos datasets mais adequados para validação da abordagem proposta.
+    \begin{enumerate}
+        \item[a.] \underline{Definição de critérios de seleção:} estabelecimento de critérios baseados em complexidade, número de classes e representatividade;
+        \item[b.] \underline{Pesquisa de datasets HSI:} levantamento dos principais datasets utilizados na literatura;
+        \item[c.] \underline{Análise das características:} avaliação das propriedades espectrais, espaciais e distribuição de classes dos datasets selecionados;
+        \item[d.] \underline{Validação da adequabilidade:} verificação se os datasets atendem aos requisitos do projeto;
+    \end{enumerate}
+    
+    \item \textbf{Implementação de técnicas de processamento paralelo}: permitirá otimizar o pipeline de classificação HSI através de bibliotecas existentes.
+    \begin{enumerate}
+        \item[a.] \underline{Seleção de bibliotecas:} escolha de ferramentas de paralelização;
+        \item[b.] \underline{Aplicação de paralelização:} integração de processamento paralelo no pipeline existente;
+        \item[c.] \underline{Configuração de recursos:} ajuste da utilização de CPU e memória disponíveis;
+        \item[d.] \underline{Medição de speedup:} avaliação do ganho de performance com paralelização;
+    \end{enumerate}
+    
+    \item \textbf{Integração de algoritmos de segmentação}: permitirá incorporar algoritmos de segmentação existentes ao pipeline HSI.
+    \begin{enumerate}
+        \item[a.] \underline{Seleção de implementações:} escolha de bibliotecas já implementados;
+        \item[b.] \underline{Adaptação para HSI:} ajuste dos algoritmos para trabalhar com dados hiperespectrais;
+        \item[c.] \underline{Integração com CNN 1D:} implementação da fusão espacial-espectral via concatenação;
+        \item[d.] \underline{Avaliação comparativa:} análise de performance entre os diferentes algoritmos de segmentação;
+    \end{enumerate}
+    
+    \item \textbf{Aplicação de técnicas de autotuning}: permitirá utilizar ferramentas existentes para otimização automática de hiperparâmetros.
+    \begin{enumerate}
+        \item[a.] \underline{Seleção de ferramentas:} escolha de bibliotecas de autotuning;
+        \item[b.] \underline{Definição do espaço de busca:} identificação dos hiperparâmetros críticos para otimização;
+        \item[c.] \underline{Configuração do sistema:} integração das ferramentas de autotuning ao pipeline;
+        \item[d.] \underline{Validação dos resultados:} verificação da melhoria obtida com otimização automática;
+    \end{enumerate}
+    
+    \item \textbf{Avaliação abrangente do sistema integrado}: permitirá avaliar o impacto combinado das técnicas utilizadas.
+    \begin{enumerate}
+        \item[a.] \underline{Definição de métricas:} estabelecimento de métricas de precisão (OA, AA, Kappa), eficiência (tempo, memória) e paralelização (speedup);
+        \item[b.] \underline{Testes ablation study:} avaliação isolada de cada componente para identificar contribuições individuais;
+        \item[c.] \underline{Testes do sistema completo:} avaliação do pipeline integrado com todas as técnicas;
+        \item[d.] \underline{Comparação com benchmarks:} comparação com modelo da literatura;
+        \item[e.] \underline{Análise estatística:} validação estatística dos resultados obtidos;
+    \end{enumerate}
+    
+    \item \textbf{Otimização final do sistema}: permitirá consolidar a melhor configuração baseada nos experimentos.
+    \begin{enumerate}
+        \item[a.] \underline{Seleção da configuração ótima:} escolha da melhor combinação de técnicas baseada nos resultados;
+        \item[b.] \underline{Validação cruzada:} teste da configuração final em todos os datasets;
+        \item[c.] \underline{Análise de robustez:} avaliação da estabilidade da solução em diferentes cenários;
+        \item[d.] \underline{Documentação da solução:} registro detalhado da configuração e parâmetros finais;
+    \end{enumerate}
+    
+    \item \textbf{Monografia}: permitirá a sistematização e documentação completa do trabalho desenvolvido.
+    \begin{enumerate}
+        \item[a.] \underline{Estruturação do documento:} organização dos capítulos e seções da monografia;
+        \item[b.] \underline{Redação dos resultados:} documentação detalhada de todos os experimentos e análises realizadas;
+        \item[c.] \underline{Análise crítica:} discussão dos resultados, limitações e contribuições do trabalho;
+        \item[d.] \underline{Trabalhos futuros:} identificação de oportunidades de extensão e melhorias da pesquisa;
+        \item[e.] \underline{Revisão e finalização:} revisão final do texto e adequação às normas acadêmicas;
+    \end{enumerate}
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    CRONOGRAMA    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{15pt}
+\subsubsection{Cronograma}
+
+Os cronogramas de execução deste trabalho durante o TTC II e TTC III são apresentados nos Quadros \ref{tab:cronograma2} e \ref{tab:cronograma3}, respectivamente.
+
+\uBeginCronograma{Cronograma de execução para o TTC II}{tab:cronograma2}
+    \uHeaderCronograma{07/2025}{08/2025}{09/2025}{10/2025}{11/2025}
+    \uAtividade{1.a. Revisão bibliográfica de HSI} {XX\_\_}{}{}{}{}
+    \uAtividade{1.b. Análise de técnicas de segmentação} {\_\_XX}{}{}{}{}
+    \uAtividade{1.c. Processamento paralelo em HSI} {}{XX\_\_}{}{}{}
+    \uAtividade{1.d. Autotuning em ML} {}{\_\_XX}{}{}{}
+    \uAtividade{2.a. Definição de critérios de seleção} {}{}{XX\_\_}{}{}
+    \uAtividade{2.b. Pesquisa de datasets HSI} {}{}{\_\_XX}{}{}
+    \uAtividade{2.c. Análise das características} {}{}{}{XX\_\_}{}
+    \uAtividade{2.d. Validação da adequabilidade} {}{}{}{\_\_XX}{}
+    \uAtividade{3.a. Seleção de bibliotecas} {}{}{}{}{XX\_\_}
+    \uAtividade{8.a. Monografia} {XXXX}{XXXX}{XXXX}{XXXX}{XX\_\_}
+\uEndCronograma
+
+\uBeginCronograma{Cronograma de execução para o TTC III}{tab:cronograma3}
+    \uHeaderCronograma{12/2025}{01/2026}{02/2026}{03/2026}{04/2026}
+    \uAtividade{3.b. Aplicação de paralelização} {XX\_\_}{}{}{}{}
+    \uAtividade{3.c. Configuração de recursos} {\_\_XX}{}{}{}{}
+    \uAtividade{3.d. Medição de speedup} {}{XX\_\_}{}{}{}
+    \uAtividade{4.a. Seleção de implementações} {}{\_\_XX}{}{}{}
+    \uAtividade{4.b. Adaptação para HSI} {}{}{XX\_\_}{}{}
+    \uAtividade{4.c. Integração com CNN 1D} {}{}{\_\_XX}{}{}
+    \uAtividade{4.d. Avaliação comparativa} {}{}{}{XX\_\_}{}
+    \uAtividade{5.a. Seleção de ferramentas} {X\_\_\_}{}{}{}{}
+    \uAtividade{5.b. Definição do espaço de busca} {\_XXX}{}{}{}{}
+    \uAtividade{5.c. Configuração do sistema} {}{XXX\_}{}{}{}
+    \uAtividade{5.d. Validação dos resultados} {}{\_\_\_X}{}{}{}
+    \uAtividade{6.a. Definição de métricas} {}{}{XX\_\_}{}{}
+    \uAtividade{6.b. Testes ablation study} {}{}{\_\_XX}{XX\_\_}{}
+    \uAtividade{6.c. Testes do sistema completo} {}{}{}{\_\_XX}{}
+    \uAtividade{6.d. Comparação com benchmarks} {}{}{}{}{XX\_\_}
+    \uAtividade{7.a. Seleção da configuração ótima} {}{}{}{}{XX\_\_}
+    \uAtividade{8.b. Monografia} {XXXX}{XXXX}{XXXX}{XXXX}{XX\_\_}
+\uEndCronograma
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    ANALISE DE RISCOS    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bigskip
+\subsection{Análise de Riscos}
+
+Quadro 3, apresenta os riscos envolvidos no trabalho, no qual as colunas possuem as seguintes definições: (i) Risco: descrição do risco identificado; (ii) Probabilidade: probabilidade de ocorrer o risco (Alta, Média ou Baixa); (iii) Impacto: grau de impacto do risco para o andamento do trabalho (Alto, Médio ou Baixo); (iv) Gatilho: evento ou condição que caracteriza a ocorrência do risco; (v) Plano de contingência: ações a serem realizadas para contornar os efeitos do risco (é acionado pelo Gatilho).
+
+\uBeginRiscos{Análise de Riscos}{tab:riscos}
+
+   \uRisco{Elevado consumo de recursos computacionais com processamento paralelo}{Alta}{Alto}{Múltiplas CNNs 1D em paralelo excederem capacidade de memória GPU/CPU}{Implementar processamento sequencial otimizado, usar técnicas de batching inteligente, reduzir número de CNNs paralelas}
+   
+   \uRisco{Segmentadores não escalarem para HSI grandes}{Média}{Médio}{Tempo de processamento inviável para imagens grandes}{Implementar segmentação por blocos, usar algoritmos mais eficientes}
+   
+   \uRisco{Algoritmos de autotuning não convergirem}{Média}{Médio}{Espaço de busca muito grande ou função objetivo instável}{Usar métodos híbridos, definir limites de busca mais restritivos}
+   
+   \uRisco{Instabilidade nos resultados entre diferentes execuções}{Baixa}{Médio}{Variações significativas nas métricas entre runs}{Usar seeds fixos, aumentar número de execuções, análise estatística dos resultados}
+   
+   \uRisco{Dependências de bibliotecas incompatíveis}{Baixa}{Baixo}{Conflitos entre versões de bibliotecas}{Usar ambientes virtuais isolados, documentar versões específicas, testes de compatibilidade}
+\uEndRiscos
+
+\section{Banca}
+
+Sugestão de banca para este trabalho: Prof. Douglas Rossi de Melo e Prof. Tiago B. N. Silveira.
+
+\pagebreak
+
+\pagebreak
+\bibliography{referencias}
+‌
+
+\end{document}

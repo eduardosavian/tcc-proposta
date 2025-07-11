@@ -1,0 +1,370 @@
+% Definições do LaTex para Proposta de TTC da UNIVALI
+%
+% Desenvolvido por:
+%   Douglas Santos
+%   Guilherme Sborz
+%
+% Adaptado para 2023.01 por:
+%   Eduardo Ayr Pereira Orsi
+
+\usepackage{times}
+%\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+%\usepackage{ctable}
+\usepackage{verbatim}
+\usepackage{setspace}
+\usepackage{fontspec}
+\usepackage{algorithmic}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{float}
+\pagenumbering{gobble}
+\usepackage[portuguese,ruled,vlined,linesnumbered,resetcount]{algorithm2e}
+\usepackage[skip=0.5\baselineskip]{caption}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{eso-pic}
+\usepackage[shortlabels]{enumitem}
+\usepackage{graphicx}
+\usepackage{multirow}
+
+\AddToShipoutPictureBG{
+  \AtPageUpperLeft{
+    \raisebox{-\height - 0.5cm}{\hspace*{1.25cm} \includegraphics[scale=1]{fig/Imagem1.jpg}}
+  }}
+
+
+% CRIACAO DE QUADROS
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[
+    listname={Quadros},
+    name=Quadro,
+    placement=tbhp,
+]{quadro}
+
+\usepackage{caption}
+% SETA POSICAO DA CAPTION DO QUADRO
+\captionsetup[quadro]{
+  name=Quadro,
+  skip=0pt,             % remove space between caption and table
+  singlelinecheck=false % align left
+}
+
+% SETA POSICAO DA CAPTION DA TABELA
+\captionsetup[table]{
+  name=Tabela,
+  skip=0pt,             % remove space between caption and table
+  singlelinecheck=false % align left
+}
+
+\usepackage[
+    a4paper,
+    top=1.25cm,
+    left=3cm,
+    right=2cm,
+    bottom=5cm % 4,5 cm
+]{geometry}
+
+\setmainfont{Arial}
+\fontsize{12}{12}\selectfont
+
+\renewcommand{\baselinestretch}{1.5} % Espaçamento entre linhas 
+\renewcommand{\refname}{\noindent \changefonttitle Referências}
+
+\newcommand{\changefont}{%
+    \fontsize{12}{11}\selectfont
+}
+
+\newcommand{\citeDir}[1]{\citeauthoronline{#1} (\citeyear{#1})}
+
+\newcommand{\changefontauthor}{%
+    \fontsize{14}{11}\selectfont
+}
+
+\newcommand{\uAutor}[1]{\changefontauthor #1}
+
+\newcommand{\changefonttitle}{%
+    \fontsize{16}{16}\selectfont
+}
+
+\def\myrulefill{\leavevmode\leaders\hrule height .9ex width 1ex depth -0.6ex\hfill\kern\z@}
+\usepackage{fancyhdr} % cabeçalho
+\setlength{\headheight}{3cm} 
+
+% \newcommand{\uHeadertext}[0]{
+%   \newlength{\myoddoffset}
+% \setlength{\myoddoffset}{\marginparwidth + \marginparsep}
+
+%     \pagestyle{fancy}
+%     \fancyhf{}
+%       \fancyhead[C]{ \hspace*{-1.5cm}
+%       \vspace{}
+%         \includegraphics[scale=1]{fig/Imagem1.jpg}
+%     }
+  
+% }
+
+\usepackage{xcolor}
+\definecolor{univali}{HTML}{000080}
+\renewcommand{\headrulewidth}{0pt} % remove line from header
+
+\newenvironment{FirstPagetext}[0]{
+    \setmainfont{Arial}
+    \fontsize{11}{11}
+    \begin{center}
+    \makebox[\linewidth]{\textbf{APÊNDICE A – PROPOSTA DE TRABALHO DE CONCLUSÃO DE CURSO (TCC I)}}
+    \makebox[\linewidth]{\textbf{PROPOSTA DE TRABALHO DE CONCLUSÃO DE CURSO (TCC I)}}
+    \end{center}
+    \vspace{5pt}
+    \setmainfont{Verdana}
+    \fontsize{10}{10}
+    \def \lprop {-5pt}
+    \begin{center}
+     \includegraphics[scale=0.18]{fig/univali.png}
+                \vspace{-5pt}
+                \makebox[\linewidth]{\textbf{UNIVERSIDADE DO VALE DO ITAJAÍ}}
+                \vspace{-5pt}
+                \textcolor{univali}{\myrulefill} \,\makebox[.46\textwidth][c]{\textbf{Computação}}\, \textcolor{univali}{\myrulefill} 
+                \vspace{-5pt}
+                \makebox[\textwidth][c]{\textbf{Trabalho de Conclusão de Curso (TCC)}}
+    \end{center}
+}
+
+
+
+
+
+%\tab
+\newcommand\tab[1][.65cm]{\hspace{#1}}
+
+\newcommand{\uTitulo}[1]{
+    {\changefonttitle \textbf{\MakeUppercase{#1}}}
+}
+
+\newcommand{\uSubTitulo}[1]{
+    {\changefonttitle \MakeUppercase{#1}}
+}
+
+\newcommand{\uSessaoResumo}[1]{
+        {\noindent \bf \fontsize{16}{16}\selectfont #1}
+}
+
+\newcommand{\uTextoResumo}[1]{
+    \vspace{12pt}
+    \begin{spacing}{1}
+     #1
+    \end{spacing}
+}
+
+\usepackage[explicit]{titlesec}
+
+\titleformat{name=\section}
+ {\fontsize{16}{0}\bfseries}
+ {\thesection}
+ {0.3in}
+ {\MakeUppercase{#1}}
+ 
+\titleformat{\subsection}
+ {\fontsize{14}{14}\bfseries}
+ {\thesubsection}
+ {0.3in}
+ {\MakeUppercase{#1}}
+ 
+\titleformat{\subsubsection}
+ {\fontsize{14}{14}\bfseries}
+ {\thesubsubsection}
+ {0.3in}
+ {#1}
+
+\makeatletter
+\def\hlinewd#1{%
+  \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
+   \reserved@a\@xhline}
+\makeatother
+  
+  \def\thickhrulefill{\leavevmode \leaders \hrule height 0.3ex \hfill \kern \z@}
+% MODELO DE FORMATAÇÃO PROPOSTA DE TRABALHO
+\newenvironment{Academico}[5][]{
+    
+    \centering {\setmainfont{Impact} \fontsize{20}{20} \underline{\underline{\textbf{PROPOSTA DE TRABALHO}}}}
+    \vspace{-5mm}
+
+    \newlength\qA
+    \setlength\qA{\dimexpr .5\textwidth -2\tabcolsep}
+    
+    \newlength\qB
+    \setlength\qB{\dimexpr .5\textwidth -2\tabcolsep}
+    
+    \begin{table}[h!]
+        \setmainfont{Arial}
+        \fontsize{10}{10}\selectfont
+          \def \lprop {5pt}
+        \setlength{\extrarowheight}{\lprop}
+        \begin{tabular}{p{\textwidth}}
+            \hlinewd{2pt}
+            \textbf{Nome do Acadêmico:} #2
+            \\[\lprop]    \hline 
+            \textbf{Código de Pessoa:} #3
+            \\[\lprop]    \hline
+            \textbf{E-mail de Contato:} #4
+            \\[\lprop]    \hline
+            \textbf{Telefone(s) de Contato:} #5 \\[\lprop]  \hlinewd{2pt}
+        \end{tabular}
+    \end{table}
+    \vspace{-5mm} % Reduz espaço após a tabela
+}
+
+\newenvironment{Orientador}[5][]{
+       % --------------------------------------------------------------- %
+    \newlength\qC
+    \setlength\qC{\dimexpr .4\textwidth -2\tabcolsep}
+    
+    \newlength\qD
+    \setlength\qD{\dimexpr .6\textwidth -2\tabcolsep}
+    
+    %\thickhrulefill % Linha de divisão entre tabelas
+    \begin{table}[h!]
+    \setmainfont{Arial}
+        \fontsize{10}{10}\selectfont
+          \def \lprop {5pt}
+        \setlength{\extrarowheight}{\lprop}
+        \begin{tabular}{p{\textwidth}}
+            \hlinewd{2pt}
+            {\textbf{Nome do Professor Orientador:} #2}                        \\[\lprop]    \hline
+            {\textbf{E-mail de Contato:} #3}                                   \\[\lprop]    \hline
+            {\textbf{Telefone(s) de Contato:} #4}                              \\[\lprop]    \hline
+            \textbf{Dia da Semana e Horário de Atendimento ao Acadêmico: }{#5}
+             \\[\lprop]  \hline
+             {}      
+             \\[\lprop]   
+            \hlinewd{2pt}
+        \end{tabular}
+    \end{table}
+    \vspace{-5mm}
+    %\thickhrulefill % Linha de divisão entre tabelas
+}
+
+\newenvironment{Modalidade}[9][0] {
+   
+   \begin{table}[h!]
+   \setmainfont{Arial}
+        \fontsize{10}{10}\selectfont
+          \def \lprop {5pt}
+      \setlength{\extrarowheight}{\lprop}
+        \begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} ccccc}
+            \hlinewd{2pt}
+            \multicolumn{2}{l}{\textbf{Curso: \nX\nX\nX\nX\nX{( #2 )} Ciência da Computação \nX\nX\nX\nX\nX\nX{( #3 )} Engenharia de Computação}} \\[\lprop]    \hline
+            \multicolumn{2}{l}{\textbf{Modalidade do Trabalho: \nX\nX\nX\nX ({ #4 }) Monografia \nX\nX\nX\nX {( #5 )} Produto \nX\nX\nX\nX {( #6 )} Artigo }} \\[\lprop]    \hline
+            \multicolumn{2}{l}{\textbf{Modalidade da Orientação: \nX\nX\nX\nX\nX\nX\nX({ #7 }) Presencial \nX\nX\nX\nX\nX\nX\nX{( #8 )} Remota }} \\[\lprop]    \hline
+            \multicolumn{2}{l}{\textbf{Área de Trabalho: } #9} \\[\lprop]    \hlinewd{2pt}
+        \end{tabular*}
+    \end{table}
+    \vspace{-2.5mm}
+}
+% --
+
+\newenvironment{Assinaturas} {
+    \setmainfont{Arial}
+    \fontsize{10}{10}\selectfont
+        \centering{\textit{Considerando verídicas as Informações fornecidas neste formulário, 
+    encaminhamos a Proposta de Trabalho para avaliação.}
+    }
+    
+    \def \rowHeightAssinatura {6pt}
+    \newlength\qFill
+    \setlength\qFill{\dimexpr 1\textwidth -2\tabcolsep}
+    %\usepackage{array}
+    \begin{table}[h!]
+        \setmainfont{Arial}
+        \fontsize{10}{10}\selectfont
+    %     \begin{adjustbox}{width=1\textwidth}
+    %     \small
+        \setlength{\extrarowheight}{\rowHeightAssinatura}
+        \begin{tabular}{m{\qFill}}
+            \hline
+            \textbf{Assinatura do Acadêmico:} \\[\rowHeightAssinatura] \hline
+            \textbf{Assinatura do Professor Orientador:} \\[\rowHeightAssinatura] \hline
+            \multicolumn{1}{r}{\textit{Itajaí(SC), \today}} \\[\rowHeightAssinatura] \hlinewd{2pt}
+        \end{tabular}
+    %     \end{adjustbox}
+    \end{table}
+}
+
+
+\newenvironment{rodape} {
+    \raggedleft
+    \includegraphics[scale=0.18]{fig/univali-rodape.png}   
+}
+
+
+
+%%%%%%%%%%%%%%%%% TABELAS DOS CRONOGRAMAS %%%%%%%%%%%%%%%%%%%%%%%%
+
+% lengths
+\newlength\qa
+\setlength\qa{\dimexpr .4\textwidth -.5\tabcolsep}
+\newlength\qk
+\setlength\qk{\dimexpr .1\textwidth -.5\tabcolsep}
+
+
+% center cells
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+
+% invisible X
+\newcommand{\nX}{\phantom{X}}
+
+\newcommand{\uBeginCronograma}[2]{
+\begin{quadro}[H]
+    \caption{#1}
+    \label{#2}
+    \fontsize{10}{12}\selectfont
+    \def\arraystretch{1.25}%  1 is the default
+    \setlength\tabcolsep{1.5pt} % default value: 6pt
+    \begin{tabular}{|p{\qa}|P{\qk}|P{\qk}|P{\qk}|P{\qk}|P{\qk}|}
+        \hline
+}
+
+\newcommand{\uHeaderCronograma}[5]{
+    {\fontsize{12}{14}\selectfont\textbf{Atividade}} & \textbf{#1} & \textbf{#2} & \textbf{#3} & \textbf{#4} & \textbf{#5} \\ \hline
+}
+
+\newcommand{\uAtividade}[6]{
+    #1 & \mbox{#2} & \mbox{#3} & \mbox{#4} & \mbox{#5} & \mbox{#6} \\ \hline
+}
+
+\newcommand{\uEndCronograma}{
+    \end{tabular}
+\end{quadro}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% TABELA DE RISCOS %%%%%%%%%%%%%%%%%%%%%%%%%%
+% lengths
+\newlength\qn
+\setlength\qn{\dimexpr .2\textwidth -2\tabcolsep}
+\newlength\qp
+\setlength\qp{\dimexpr .189\textwidth -2\tabcolsep}
+\newlength\qi
+\setlength\qi{\dimexpr .125\textwidth -2\tabcolsep}
+\newlength\qc
+\setlength\qc{\dimexpr .286\textwidth -2\tabcolsep}
+
+\newcommand{\uBeginRiscos}[2]{
+\begin{quadro}[ht]
+    \caption{#1}
+    \label{#2}
+    \fontsize{10}{12}\selectfont
+    \def\arraystretch{1.25}%  1 is the default
+    \begin{tabular}{|p{\qn}|p{\qp}|p{\qi}|p{\qn}|p{\qc}|}
+        \hline
+        {\fontsize{12}{14}\selectfont\textbf{Risco}} & \textbf{Probabilidade} & \textbf{Impacto} & \textbf{Gatilho} & \textbf{Plano de Contingência} \\ \hline
+}
+
+\newcommand{\uRisco}[5]{
+    #1 & #2 & #3 & #4 & #5 \\ \hline
+}
+
+\newcommand{\uEndRiscos}{
+    \end{tabular}
+\end{quadro}
+}
